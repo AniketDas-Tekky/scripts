@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+MAIN=${GIT_MASTER:-"main"}
+cur_branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+if [[ "$cur_branch" != "$MAIN" ]]; then
+  git tag archive/$cur_branch || :
+  git checkout $MAIN
+  git branch -D $cur_branch
+fi
